@@ -153,6 +153,26 @@ public :
     ////////////////////////////////////////////////////////////
     virtual void setKeyRepeatEnabled(bool enabled);
 
+    ////////////////////////////////////////////////////////////
+    /// \brief Request input focus from the OS
+    ///
+    /// \return True if operation was successful, false otherwise
+    ///
+    ////////////////////////////////////////////////////////////
+    virtual bool requestFocus() const;
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Determine whether the window has the input focus
+    ///
+    /// At any given time, only one window may have the input focus
+    /// to receive input events such as keystrokes or most mouse
+    /// events.
+    ///
+    /// \return True if window has focus, false otherwise
+    ///
+    ////////////////////////////////////////////////////////////
+    virtual bool hasFocus() const;
+
 protected:
 
     ////////////////////////////////////////////////////////////
@@ -237,6 +257,7 @@ private :
     bool     m_resizing;         ///< Is the window being resized?
     Uint16   m_surrogate;        ///< First half of the surrogate pair, in case we're receiving a Unicode character in two events
     bool     m_mouseInside;      ///< Mouse is inside the window?
+    bool     m_focused;          ///< Window has the input focus
 };
 
 } // namespace priv

@@ -73,7 +73,8 @@ m_keyRepeatEnabled(true),
 m_lastSize        (0, 0),
 m_resizing        (false),
 m_surrogate       (0),
-m_mouseInside     (false)
+m_mouseInside     (false),
+m_focused         (false)
 {
     if (m_handle)
     {
@@ -94,7 +95,8 @@ m_keyRepeatEnabled(true),
 m_lastSize        (mode.width, mode.height),
 m_resizing        (false),
 m_surrogate       (0),
-m_mouseInside     (false)
+m_mouseInside     (false),
+m_focused         (false)
 {
     // Register the window class at first call
     if (windowCount == 0)
@@ -141,6 +143,9 @@ m_mouseInside     (false)
     // Switch to fullscreen if requested
     if (fullscreen)
         switchToFullscreen(mode);
+
+    // Determine focus
+    m_focused = GetActiveWindow() == m_handle;
 
     // Increment window count
     windowCount++;
@@ -302,6 +307,22 @@ void WindowImplWin32::setMouseCursorVisible(bool visible)
 void WindowImplWin32::setKeyRepeatEnabled(bool enabled)
 {
     m_keyRepeatEnabled = enabled;
+}
+
+
+////////////////////////////////////////////////////////////
+bool WindowImplWin32::requestFocus() const
+{
+    if (!m_focused)
+        return SetForegroundWindow(m_handle);
+    return true;
+}
+
+
+////////////////////////////////////////////////////////////
+bool WindowImplWin32::hasFocus() const
+{
+    return m_focused;
 }
 
 
@@ -486,6 +507,7 @@ void WindowImplWin32::processEvent(UINT message, WPARAM wParam, LPARAM lParam)
             Event event;
             event.type = Event::GainedFocus;
             pushEvent(event);
+            m_focused = true;
             break;
         }
 
@@ -495,6 +517,7 @@ void WindowImplWin32::processEvent(UINT message, WPARAM wParam, LPARAM lParam)
             Event event;
             event.type = Event::LostFocus;
             pushEvent(event);
+            m_focused = false;
             break;
         }
 

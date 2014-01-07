@@ -192,6 +192,26 @@ public :
     ////////////////////////////////////////////////////////////
     virtual void setKeyRepeatEnabled(bool enabled) = 0;
 
+    ////////////////////////////////////////////////////////////
+    /// \brief Request input focus from the OS
+    ///
+    /// \return True if operation was successful, false otherwise
+    ///
+    ////////////////////////////////////////////////////////////
+    virtual bool requestFocus() const = 0;
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Determine whether the window has the input focus
+    ///
+    /// At any given time, only one window may have the input focus
+    /// to receive input events such as keystrokes or most mouse
+    /// events.
+    ///
+    /// \return True if window has focus, false otherwise
+    ///
+    ////////////////////////////////////////////////////////////
+    virtual bool hasFocus() const = 0;
+
 protected :
 
     ////////////////////////////////////////////////////////////
