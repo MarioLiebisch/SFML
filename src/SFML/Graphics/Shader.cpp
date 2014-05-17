@@ -410,6 +410,74 @@ void Shader::setParameter(const std::string& name, CurrentTextureType)
 
 
 ////////////////////////////////////////////////////////////
+void Shader::setParameter(const std::string& name, const float values[], std::size_t count, std::size_t dimensions)
+{
+    if (m_shaderProgram)
+    {
+        ensureGlContext();
+
+        // Enable program
+        GLhandleARB program = glCheck(glGetHandleARB(GL_PROGRAM_OBJECT_ARB));
+        glCheck(glUseProgramObjectARB(m_shaderProgram));
+
+        // Get parameter location and assign it new values
+        GLint location = getParamLocation(name);
+        if (location != -1)
+        {
+            switch (dimensions)
+            {
+            case 1:
+                glCheck(glUniform1fvARB(location, count, values));
+                break;
+            case 2:
+                glCheck(glUniform2fvARB(location, count, values));
+                break;
+            case 3:
+                glCheck(glUniform3fvARB(location, count, values));
+                break;
+            case 4:
+                glCheck(glUniform4fvARB(location, count, values));
+                break;
+            default:
+                err() << "Tried to assign an array of " << dimensions << "-dimensional vectors in a shader, which is not supported" << std::endl;
+                break;
+            }
+        }
+
+        // Disable program
+        glCheck(glUseProgramObjectARB(program));
+    }
+}
+
+
+////////////////////////////////////////////////////////////
+void Shader::setParameter(const std::string& name, const Vector2f values[], std::size_t count)
+{
+    float* tmp = new float[2 * count];
+    for (std::size_t i = 0; i < 2 * count; i += 2)
+    {
+        tmp[i]     = values[i].x;
+        tmp[i + 1] = values[i].y;
+    }
+    setParameter(name, tmp, count, 2);
+    delete [] tmp;
+}
+
+////////////////////////////////////////////////////////////
+void Shader::setParameter(const std::string& name, const Vector3f values[], std::size_t count)
+{
+    float* tmp = new float[3 * count];
+    for (std::size_t i = 0; i < 3 * count; i += 3)
+    {
+        tmp[i]     = values[i].x;
+        tmp[i + 1] = values[i].y;
+        tmp[i + 2] = values[i].z;
+    }
+    setParameter(name, tmp, count, 3);
+    delete[] tmp;
+}
+
+////////////////////////////////////////////////////////////
 void Shader::bind(const Shader* shader)
 {
     ensureGlContext();

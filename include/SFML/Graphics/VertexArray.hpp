@@ -180,7 +180,7 @@ private :
     /// \param states Current render states
     ///
     ////////////////////////////////////////////////////////////
-    virtual void draw(RenderTarget& target, RenderStates states) const;
+    virtual void draw(RenderTarget& target, RenderStates states, unsigned int instanceCount = 1) const;
 
 private:
 

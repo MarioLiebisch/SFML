@@ -41,7 +41,7 @@ public :
             onUpdate(time, x, y);
     }
 
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const
+    void draw(sf::RenderTarget& target, sf::RenderStates states, unsigned int instanceCount) const
     {
         if (m_isLoaded)
         {
@@ -52,7 +52,7 @@ public :
             sf::Text error("Shader not\nsupported", getFont());
             error.setPosition(320.f, 200.f);
             error.setCharacterSize(36);
-            target.draw(error, states);
+            target.draw(error, states, instanceCount);
         }
     }
 

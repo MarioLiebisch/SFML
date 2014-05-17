@@ -229,23 +229,27 @@ public :
     ////////////////////////////////////////////////////////////
     /// \brief Draw a drawable object to the render-target
     ///
-    /// \param drawable Object to draw
-    /// \param states   Render states to use for drawing
+    /// \param drawable      Object to draw
+    /// \param states        Render states to use for drawing
+    /// \param instanceCount Number of instances to draw
     ///
     ////////////////////////////////////////////////////////////
-    void draw(const Drawable& drawable, const RenderStates& states = RenderStates::Default);
+    void draw(const Drawable& drawable, const RenderStates& states = RenderStates::Default,
+              unsigned int instanceCount = 1);
 
     ////////////////////////////////////////////////////////////
     /// \brief Draw primitives defined by an array of vertices
     ///
-    /// \param vertices    Pointer to the vertices
-    /// \param vertexCount Number of vertices in the array
-    /// \param type        Type of primitives to draw
-    /// \param states      Render states to use for drawing
+    /// \param vertices      Pointer to the vertices
+    /// \param vertexCount   Number of vertices in the array
+    /// \param type          Type of primitives to draw
+    /// \param states        Render states to use for drawing
+    /// \param instanceCount Number of instances to draw
     ///
     ////////////////////////////////////////////////////////////
     void draw(const Vertex* vertices, unsigned int vertexCount,
-              PrimitiveType type, const RenderStates& states = RenderStates::Default);
+              PrimitiveType type, const RenderStates& states = RenderStates::Default,
+              unsigned int instanceCount = 1);
 
     ////////////////////////////////////////////////////////////
     /// \brief Return the size of the rendering region of the target

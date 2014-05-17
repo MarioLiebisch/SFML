@@ -259,6 +259,58 @@ private:
 
 
 ////////////////////////////////////////////////////////////
+// "Instancing" demo
+////////////////////////////////////////////////////////////
+class Instancing : public Effect
+{
+public:
+
+    Instancing() :
+        Effect("instancing"),
+        m_count(1)
+    {
+    }
+
+    bool onLoad()
+    {
+        // Load the texture
+        if (!m_texture.loadFromFile("resources/sfml.png"))
+            return false;
+
+        // Initialize the background sprite
+        m_sprite.setTexture(m_texture);
+        m_sprite.setPosition(135, 100);
+
+        // Load the shader
+        if (!m_shader.loadFromFile("resources/instancing.vert", sf::Shader::Vertex))
+            return false;
+        m_shader.setParameter("distance", 5.f);
+
+        return true;
+    }
+
+    void onUpdate(float time, float x, float y)
+    {
+        m_count = std::max<int>(static_cast<int>(x * 10) + 1, 1);
+    }
+
+    void onDraw(sf::RenderTarget& target, sf::RenderStates states) const
+    {
+        states.shader = &m_shader;
+        // Draw multiple instances - positions are adjusted in the vertex shader
+        target.draw(m_sprite, states, m_count);
+    }
+
+private:
+
+    sf::Texture m_texture;
+    sf::Sprite m_sprite;
+    sf::Shader m_shader;
+    std::size_t m_count;
+};
+
+
+////////////////////////////////////////////////////////////
 /// Entry point of application
 ///
 /// \return Application exit code
@@ -282,6 +334,7 @@ int main()
     effects.push_back(new WaveBlur);
     effects.push_back(new StormBlink);
     effects.push_back(new Edge);
+    effects.push_back(new Instancing);
     std::size_t current = 0;
 
     // Initialize them

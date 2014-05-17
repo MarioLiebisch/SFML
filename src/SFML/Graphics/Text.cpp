@@ -223,7 +223,7 @@ FloatRect Text::getGlobalBounds() const
 
 
 ////////////////////////////////////////////////////////////
-void Text::draw(RenderTarget& target, RenderStates states) const
+void Text::draw(RenderTarget& target, RenderStates states, unsigned int instanceCount) const
 {
     if (m_font)
     {
@@ -231,7 +231,7 @@ void Text::draw(RenderTarget& target, RenderStates states) const
 
         states.transform *= getTransform();
         states.texture = &m_font->getTexture(m_characterSize);
-        target.draw(m_vertices, states);
+        target.draw(m_vertices, states, instanceCount);
     }
 }
 

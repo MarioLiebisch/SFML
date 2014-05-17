@@ -64,9 +64,10 @@ protected :
     ///
     /// \param target Render target to draw to
     /// \param states Current render states
+    /// \param instanceCount Number of instances to draw
     ///
     ////////////////////////////////////////////////////////////
-    virtual void draw(RenderTarget& target, RenderStates states) const = 0;
+    virtual void draw(RenderTarget& target, RenderStates states, unsigned int instanceCount = 1) const = 0;
 };
 
 } // namespace sf

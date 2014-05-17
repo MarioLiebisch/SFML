@@ -210,7 +210,7 @@ void Shape::update()
 
 
 ////////////////////////////////////////////////////////////
-void Shape::draw(RenderTarget& target, RenderStates states) const
+void Shape::draw(RenderTarget& target, RenderStates states, unsigned int instanceCount) const
 {
     states.transform *= getTransform();
 
@@ -222,7 +222,7 @@ void Shape::draw(RenderTarget& target, RenderStates states) const
     if (m_outlineThickness != 0)
     {
         states.texture = NULL;
-        target.draw(m_outlineVertices, states);
+        target.draw(m_outlineVertices, states, instanceCount);
     }
 }
 

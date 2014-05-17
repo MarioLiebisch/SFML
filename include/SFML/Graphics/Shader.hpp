@@ -457,6 +457,82 @@ public :
     void setParameter(const std::string& name, CurrentTextureType);
 
     ////////////////////////////////////////////////////////////
+    /// \brief Change a float or vector array parameter of the shader
+    ///
+    /// \a name is the name of the variable to change in the shader.
+    /// The corresponding parameter in the shader must be a float
+    /// or vector array (float[]/vec2/vec3/vec4 GLSL type) with
+    /// enough space to take the elements passed.
+    ///
+    /// Example:
+    /// \code
+    /// uniform float myparam1[10]; // first variable in the shader
+    /// uniform vec2  myparam2[10]; // second variable in the shader
+    /// \endcode
+    /// \code
+    /// float param1 = {0, .5f, 1.f, 1.5f};
+    /// float param2 = {0, 0, .5f, 1.f, 1.5f, 1.5f, 4.f, 4.f};
+    /// shader.setParameter("myparam1", param1, 4);
+    /// shader.setParameter("myparam2", param2, 4, 2);
+    /// \endcode
+    ///
+    /// \param name       Name of the parameter in the shader
+    /// \param values     Pointer to an array to be assigned
+    /// \param count      Number of elements to be assigned, not the array length
+    /// \param dimensions The number of dimensions (1-4) of each element
+    ///
+    ////////////////////////////////////////////////////////////
+    void setParameter(const std::string& name, const float values[], std::size_t count, std::size_t dimensions = 1);
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Change a 2-dimensional vector array parameter of the shader
+    ///
+    /// \a name is the name of the variable to change in the shader.
+    /// The corresponding parameter in the shader must be a 2-dimensional
+    /// vector array (vec2 GLSL type) with enough space to take the
+    /// elements passed.
+    ///
+    /// Example:
+    /// \code
+    /// uniform vec2  myparam[10]; // this is the variable in the shader
+    /// \endcode
+    /// \code
+    /// float param = {0, 0, .5f, 1.f, 1.5f, 1.5f, 4.f, 4.f};
+    /// shader.setParameter("myparam", param, 4);
+    /// \endcode
+    ///
+    /// \param name       Name of the parameter in the shader
+    /// \param values     Pointer to an array to be assigned
+    /// \param count      Number of elements to be assigned
+    ///
+    ////////////////////////////////////////////////////////////
+    void setParameter(const std::string& name, const Vector2f values[], std::size_t count);
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Change a 3-dimensional vector array parameter of the shader
+    ///
+    /// \a name is the name of the variable to change in the shader.
+    /// The corresponding parameter in the shader must be a 3-dimensional
+    /// vector array (vec3 GLSL type) with enough space to take the
+    /// elements passed.
+    ///
+    /// Example:
+    /// \code
+    /// uniform vec3  myparam[10]; // this is the variable in the shader
+    /// \endcode
+    /// \code
+    /// float param = {0, 0, .5f, 1.f, 1.5f, 1.5f, 4.f, 4.f, 4.f};
+    /// shader.setParameter("myparam", param, 3);
+    /// \endcode
+    ///
+    /// \param name       Name of the parameter in the shader
+    /// \param values     Pointer to an array to be assigned
+    /// \param count      Number of elements to be assigned
+    ///
+    ////////////////////////////////////////////////////////////
+    void setParameter(const std::string& name, const Vector3f values[], std::size_t count);
+
+    ////////////////////////////////////////////////////////////
     /// \brief Bind a shader for rendering
     ///
     /// This function is not part of the graphics API, it mustn't be

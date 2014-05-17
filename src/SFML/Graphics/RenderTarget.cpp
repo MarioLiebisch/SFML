@@ -180,18 +180,20 @@ Vector2i RenderTarget::mapCoordsToPixel(const Vector2f& point, const View& view)
 
 
 ////////////////////////////////////////////////////////////
-void RenderTarget::draw(const Drawable& drawable, const RenderStates& states)
+void RenderTarget::draw(const Drawable& drawable, const RenderStates& states,
+                        unsigned int instanceCount)
 {
-    drawable.draw(*this, states);
+    drawable.draw(*this, states, instanceCount);
 }
 
 
 ////////////////////////////////////////////////////////////
 void RenderTarget::draw(const Vertex* vertices, unsigned int vertexCount,
-                        PrimitiveType type, const RenderStates& states)
+                        PrimitiveType type, const RenderStates& states,
+                        unsigned int instanceCount)
 {
     // Nothing to draw?
-    if (!vertices || (vertexCount == 0))
+    if (!vertices || (vertexCount == 0) || !instanceCount)
         return;
 
     // GL_QUADS is unavailable on OpenGL ES
@@ -274,7 +276,14 @@ void RenderTarget::draw(const Vertex* vertices, unsigned int vertexCount,
         GLenum mode = modes[type];
 
         // Draw the primitives
-        glCheck(glDrawArrays(mode, 0, vertexCount));
+        if (instanceCount == 1)
+        {
+            glCheck(glDrawArrays(mode, 0, vertexCount));
+        }
+        else
+        {
+            glCheck(glDrawArraysInstancedARB(mode, 0, vertexCount, instanceCount));
+        }
 
         // Unbind the shader, if any
         if (states.shader)

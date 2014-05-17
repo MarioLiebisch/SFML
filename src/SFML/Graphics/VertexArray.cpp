@@ -141,10 +141,10 @@ FloatRect VertexArray::getBounds() const
 
 
 ////////////////////////////////////////////////////////////
-void VertexArray::draw(RenderTarget& target, RenderStates states) const
+void VertexArray::draw(RenderTarget& target, RenderStates states, unsigned int instanceCount) const
 {
     if (!m_vertices.empty())
-        target.draw(&m_vertices[0], static_cast<unsigned int>(m_vertices.size()), m_primitiveType, states);
+        target.draw(&m_vertices[0], static_cast<unsigned int>(m_vertices.size()), m_primitiveType, states, instanceCount);
 }
 
 } // namespace sf

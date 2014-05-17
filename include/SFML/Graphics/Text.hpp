@@ -268,11 +268,12 @@ private :
     ////////////////////////////////////////////////////////////
     /// \brief Draw the text to a render target
     ///
-    /// \param target Render target to draw to
-    /// \param states Current render states
+    /// \param target        Render target to draw to
+    /// \param states        Current render states
+    /// \param instanceCount Number of instances to draw
     ///
     ////////////////////////////////////////////////////////////
-    virtual void draw(RenderTarget& target, RenderStates states) const;
+    virtual void draw(RenderTarget& target, RenderStates states, unsigned int instanceCount = 1) const;
 
     ////////////////////////////////////////////////////////////
     /// \brief Make sure the text's geometry is updated
