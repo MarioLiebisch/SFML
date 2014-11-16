@@ -1094,6 +1094,9 @@ endif()
 # don't leave libs/ directories in source directory
 set(LIBRARY_OUTPUT_PATH_ROOT ${CMAKE_LIBRARY_DIR})
 
+# set the target system to enable cross-compiling for MSVC with CMake 3.1.0+
+set(CMAKE_SYSTEM_NAME "Android")
+
 # Variables controlling behavior or set by cmake toolchain:
 #   ANDROID_ABI: "armeabi-v7a" (default), "armeabi", "armeabi-v7a with NEON", "armeabi-v7a with VFPV3", "armeabi-v6 with VFP", "x86", "mips"
 #   ANDROID_NATIVE_API_LEVEL: 3,4,5,8,9,14 (depends on NDK version)
