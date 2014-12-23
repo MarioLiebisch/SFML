@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2013 Jonathan De Wachter (dewachter.jonathan@gmail.com)
+// Copyright (C) 2007-2014 Laurent Gomila (laurent.gom@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -22,64 +22,77 @@
 //
 ////////////////////////////////////////////////////////////
 
-
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/System/Android/ResourceStream.hpp>
+#include <SFML/System/AssetInputStream.hpp>
 #include <SFML/System/Android/Activity.hpp>
 #include <SFML/System/Lock.hpp>
 
+#include <SFML/System/Err.hpp>
 
 namespace sf
 {
-namespace priv
-{
-
 ////////////////////////////////////////////////////////////
-ResourceStream::ResourceStream(const std::string& filename) :
+AssetInputStream::AssetInputStream() :
 m_file (NULL)
 {
-    ActivityStates* states = getActivity(NULL);
+}
+
+////////////////////////////////////////////////////////////
+AssetInputStream::~AssetInputStream()
+{
+	if (m_file)
+		AAsset_close(m_file);
+}
+
+////////////////////////////////////////////////////////////
+bool AssetInputStream::open(const std::string& filename)
+{
+    priv::ActivityStates* states = priv::getActivity(NULL);
     Lock(states->mutex);
-    m_file = AAssetManager_open(states->activity->assetManager, filename.c_str(), AASSET_MODE_UNKNOWN);
+
+    if (m_file)
+		AAsset_close(m_file);
+	
+	m_file = AAssetManager_open(states->activity->assetManager, filename.c_str(), AASSET_MODE_UNKNOWN);
+    return !!m_file;
 }
 
 
 ////////////////////////////////////////////////////////////
-ResourceStream::~ResourceStream()
+Int64 AssetInputStream::read(void* data, Int64 size)
 {
-    AAsset_close(m_file);
+    if (m_file)
+		return AAsset_read(m_file, data, size);
+    return 0;
 }
 
 
 ////////////////////////////////////////////////////////////
-Int64 ResourceStream::read(void *data, Int64 size)
+Int64 AssetInputStream::seek(Int64 position)
 {
-    return AAsset_read(m_file, data, size);
+    if (m_file)
+        return AAsset_seek(m_file, position, SEEK_SET);
+	return 0;
 }
 
 
 ////////////////////////////////////////////////////////////
-Int64 ResourceStream::seek(Int64 position)
+Int64 AssetInputStream::tell()
 {
-    AAsset_seek(m_file, position, SEEK_SET);
+    if (m_file)
+		return getSize() - AAsset_getRemainingLength(m_file);
+	return 0;
 }
 
 
 ////////////////////////////////////////////////////////////
-Int64 ResourceStream::tell()
+Int64 AssetInputStream::getSize()
 {
-    return getSize() - AAsset_getRemainingLength(m_file);
+    if (m_file)
+		return AAsset_getLength(m_file);
+	return 0;
 }
 
-
-////////////////////////////////////////////////////////////
-Int64 ResourceStream::getSize()
-{
-    return AAsset_getLength(m_file);
-}
-
-
-} // namespace priv
 } // namespace sf

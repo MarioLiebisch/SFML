@@ -75,8 +75,8 @@ else()
         set(PLATFORM_SRC ${PLATFORM_SRC}
             ${SRCROOT}/Android/Activity.hpp
             ${SRCROOT}/Android/Activity.cpp
-            ${SRCROOT}/Android/ResourceStream.cpp
-            ${SRCROOT}/Android/ResourceStream.cpp
+			${INCROOT}/AssetInputStream.hpp
+            ${SRCROOT}/Android/AssetInputStream.cpp
         )
     endif()
 

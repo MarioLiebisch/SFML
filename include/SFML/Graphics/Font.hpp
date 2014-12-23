@@ -34,6 +34,9 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/System/String.hpp>
+#ifdef ANDROID
+#include <SFML/System/AssetInputStream.hpp>
+#endif
 #include <map>
 #include <string>
 #include <vector>
@@ -339,7 +342,7 @@ private:
     mutable PageTable          m_pages;       ///< Table containing the glyphs pages by character size
     mutable std::vector<Uint8> m_pixelBuffer; ///< Pixel buffer holding a glyph's pixels before being written to the texture
     #ifdef SFML_SYSTEM_ANDROID
-    void*                      m_stream; ///< Asset file streamer (if loaded from file)
+    AssetInputStream         m_stream;      ///< Asset file streamer (if loaded from file)
     #endif
 };
 

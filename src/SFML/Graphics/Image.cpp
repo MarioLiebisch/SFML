@@ -28,9 +28,6 @@
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/ImageLoader.hpp>
 #include <SFML/System/Err.hpp>
-#ifdef SFML_SYSTEM_ANDROID
-    #include <SFML/System/Android/ResourceStream.hpp>
-#endif
 #include <algorithm>
 #include <cstring>
 
@@ -41,23 +38,12 @@ namespace sf
 Image::Image() :
 m_size(0, 0)
 {
-    #ifdef SFML_SYSTEM_ANDROID
-
-    m_stream = NULL;
-
-    #endif
 }
 
 
 ////////////////////////////////////////////////////////////
 Image::~Image()
 {
-    #ifdef SFML_SYSTEM_ANDROID
-
-        if (m_stream)
-            delete (priv::ResourceStream*)m_stream;
-
-    #endif
 }
 
 
@@ -127,11 +113,8 @@ bool Image::loadFromFile(const std::string& filename)
 
     #else
 
-        if (m_stream)
-            delete (priv::ResourceStream*)m_stream;
-
-        m_stream = new priv::ResourceStream(filename);
-        return loadFromStream(*(priv::ResourceStream*)m_stream);
+        m_stream.open(filename);
+        return loadFromStream(m_stream);
 
     #endif
 }

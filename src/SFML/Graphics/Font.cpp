@@ -28,7 +28,7 @@
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/GLCheck.hpp>
 #ifdef SFML_SYSTEM_ANDROID
-    #include <SFML/System/Android/ResourceStream.hpp>
+    #include <SFML/System/AssetInputStream.hpp>
 #endif
 #include <SFML/System/InputStream.hpp>
 #include <SFML/System/Err.hpp>
@@ -73,9 +73,6 @@ m_streamRec(NULL),
 m_refCount (NULL),
 m_info     ()
 {
-    #ifdef SFML_SYSTEM_ANDROID
-        m_stream = NULL;
-    #endif
 }
 
 
@@ -89,10 +86,6 @@ m_info       (copy.m_info),
 m_pages      (copy.m_pages),
 m_pixelBuffer(copy.m_pixelBuffer)
 {
-    #ifdef SFML_SYSTEM_ANDROID
-        m_stream = NULL;
-    #endif
-
     // Note: as FreeType doesn't provide functions for copying/cloning,
     // we must share all the FreeType pointers
 
@@ -105,13 +98,6 @@ m_pixelBuffer(copy.m_pixelBuffer)
 Font::~Font()
 {
     cleanup();
-
-    #ifdef SFML_SYSTEM_ANDROID
-
-    if (m_stream)
-        delete (priv::ResourceStream*)m_stream;
-
-    #endif
 }
 
 
@@ -161,11 +147,9 @@ bool Font::loadFromFile(const std::string& filename)
 
     #else
 
-    if (m_stream)
-        delete (priv::ResourceStream*)m_stream;
+    m_stream.open(filename);
 
-    m_stream = new priv::ResourceStream(filename);
-    return loadFromStream(*(priv::ResourceStream*)m_stream);
+    return loadFromStream(m_stream);
 
     #endif
 }

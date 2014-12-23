@@ -31,6 +31,9 @@
 #include <SFML/Graphics/Export.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Rect.hpp>
+#ifdef ANDROID
+#include <SFML/System/AssetInputStream.hpp>
+#endif
 #include <string>
 #include <vector>
 
@@ -266,7 +269,7 @@ private:
     Vector2u           m_size;   ///< Image size
     std::vector<Uint8> m_pixels; ///< Pixels of the image
     #ifdef SFML_SYSTEM_ANDROID
-    void*              m_stream; ///< Asset file streamer (if loaded from file)
+    AssetInputStream   m_stream; ///< Asset file streamer (if loaded from file)
     #endif
 };
 

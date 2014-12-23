@@ -34,7 +34,9 @@
 #include <SFML/Audio/SoundFileWriterWav.hpp>
 #include <SFML/System/FileInputStream.hpp>
 #include <SFML/System/MemoryInputStream.hpp>
-
+#ifdef ANDROID
+#include <SFML/System/AssetInputStream.hpp>
+#endif
 
 namespace
 {
@@ -68,7 +70,11 @@ SoundFileReader* SoundFileFactory::createReaderFromFilename(const std::string& f
     ensureDefaultReadersWritersRegistered();
 
     // Wrap the input file into a file stream
+#ifndef ANDROID
     FileInputStream stream;
+#else
+	AssetInputStream stream;
+#endif
     if (!stream.open(filename))
         return NULL;
 

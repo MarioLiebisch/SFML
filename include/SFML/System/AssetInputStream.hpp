@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2013 Jonathan De Wachter (dewachter.jonathan@gmail.com)
+// Copyright (C) 2007-2014 Laurent Gomila (laurent.gom@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -22,92 +22,137 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef SFML_RESOURCESTREAM_HPP
-#define SFML_RESOURCESTREAM_HPP
+#ifndef SFML_ASSETINPUTSTREAM_HPP
+#define SFML_ASSETINPUTSTREAM_HPP
 
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/System/Export.hpp>
+#include <SFML/Config.hpp>
 #include <SFML/System/InputStream.hpp>
-#include <android/asset_manager.h>
+#include <SFML/System/Export.hpp>
 #include <string>
 
+struct AAsset;
 
 namespace sf
 {
-namespace priv
-{
 ////////////////////////////////////////////////////////////
-/// \brief Read from Android asset files
+/// \brief Implementation of input stream based on an asset
 ///
 ////////////////////////////////////////////////////////////
-class SFML_SYSTEM_API ResourceStream : public InputStream
+class SFML_SYSTEM_API AssetInputStream : public InputStream
 {
-public:
+public :
+
 
     ////////////////////////////////////////////////////////////
     /// \brief Default constructor
     ///
-    /// \param filename Filename of the asset
+    ////////////////////////////////////////////////////////////
+    AssetInputStream();
+
+	
+    ////////////////////////////////////////////////////////////
+    /// \brief Virtual destructor
     ///
     ////////////////////////////////////////////////////////////
-    ResourceStream(const std::string& filename);
+    virtual ~AssetInputStream();
+
 
     ////////////////////////////////////////////////////////////
-    /// \brief Destructor
+    /// \brief Open the stream from a file path
+    ///
+    /// \param filename Name of the file to open
+    ///
+    /// \return True on success, false on error
     ///
     ////////////////////////////////////////////////////////////
-    ~ResourceStream();
+    bool open(const std::string& filename);
 
     ////////////////////////////////////////////////////////////
-    /// \brief Read data from the asset
+    /// \brief Read data from the stream
     ///
-    /// \param data Buffer where the asset data is copied
-    /// \param size Number of bytes read
+    /// After reading, the stream's reading position must be
+    /// advanced by the amount of bytes read.
+    ///
+    /// \param data Buffer where to copy the read data
+    /// \param size Desired number of bytes to read
     ///
     /// \return The number of bytes actually read, or -1 on error
     ///
     ////////////////////////////////////////////////////////////
-    Int64 read(void *data, Int64 size);
+    virtual Int64 read(void* data, Int64 size);
 
     ////////////////////////////////////////////////////////////
-    /// \brief Change the current reading position in the asset file
+    /// \brief Change the current reading position
     ///
     /// \param position The position to seek to, from the beginning
     ///
     /// \return The position actually sought to, or -1 on error
     ///
     ////////////////////////////////////////////////////////////
-    Int64 seek(Int64 position);
+    virtual Int64 seek(Int64 position);
 
     ////////////////////////////////////////////////////////////
-    /// \brief Get the current reading position in the asset file
+    /// \brief Get the current reading position in the stream
     ///
     /// \return The current position, or -1 on error.
     ///
     ////////////////////////////////////////////////////////////
-    Int64 tell();
+    virtual Int64 tell();
 
     ////////////////////////////////////////////////////////////
-    /// \brief Return the size of the asset file
+    /// \brief Return the size of the stream
     ///
-    /// \return The total number of bytes available in the asset, or -1 on error
+    /// \return The total number of bytes available in the stream, or -1 on error
     ///
     ////////////////////////////////////////////////////////////
-    Int64 getSize();
+    virtual Int64 getSize();
 
 private:
 
     ////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////
-    AAsset* m_file; ///< The asset file to read
+    AAsset *m_file; ///< Android asset resource
 };
-
-} // namespace priv
 
 } // namespace sf
 
 
-#endif // SFML_RESOURCESTREAM_HPP
+#endif // SFML_ASSETINPUTSTREAM_HPP
+
+
+////////////////////////////////////////////////////////////
+/// \class AssetInputStream
+/// \ingroup system
+///
+/// This class is a specialization of InputStream that
+/// reads from a file on disk.
+///
+/// It wraps a file in the common InputStream interface
+/// and therefore allows to use generic classes or functions
+/// that accept such a stream, with a file on disk as the data
+/// source.
+///
+/// In addition to the virtual functions inherited from
+/// InputStream, AssetInputStream adds a function to
+/// specify the file to open.
+///
+/// SFML resource classes can usually be loaded directly from
+/// a filename, so this class shouldn't be useful to you unless
+/// you create your own algorithms that operate on a InputStream.
+///
+/// Usage example:
+/// \code
+/// void process(InputStream& stream);
+///
+/// FileStream stream;
+/// if (stream.open("some_file.dat"))
+///    process(stream);
+/// \endcode
+///
+/// InputStream, MemoryStream
+///
+////////////////////////////////////////////////////////////
