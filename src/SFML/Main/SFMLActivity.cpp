@@ -160,7 +160,6 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
 
     // Load our libraries in reverse order
     loadLibrary("c++_shared", lJNIEnv, ObjectActivityInfo);
-    loadLibrary("sndfile", lJNIEnv, ObjectActivityInfo);
     loadLibrary("openal", lJNIEnv, ObjectActivityInfo);
 
 #if !defined(SFML_DEBUG)
